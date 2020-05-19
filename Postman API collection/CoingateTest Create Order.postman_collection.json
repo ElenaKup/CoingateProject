@@ -1,0 +1,277 @@
+{
+	"info": {
+		"_postman_id": "bfd0d668-fafb-41df-8a45-34372973b82a",
+		"name": "CoingateTest Create Order",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Post order with not existing currency",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "11fc8809-37e0-4afc-ad2a-a1ba85a00c0e",
+						"exec": [
+							"pm.test(\"Status code is 422\", function () {\r",
+							"    pm.response.to.have.status(422);\r",
+							"});\r",
+							"pm.test(\"Check response is false\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include('\"Order is not valid\"');\r",
+							"});\r",
+							"pm.test(\"Check if currency does not exist\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include('\"Price currency does not exist\"');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n            \"status\": \"new\",\r\n            \"do_not_convert\": false,\r\n            \"price_currency\": \"XXX\",\r\n            \"price_amount\": \"500.0\",\r\n            \"lightning_network\": false,\r\n            \"receive_currency\": \"XXX\",\r\n            \"receive_amount\": \"\",\r\n            \"created_at\": \"2020-05-16T11:07:49+00:00\",\r\n            \"order_id\": \"111\",\r\n            \"payment_url\": \"https://pay-sandbox.coingate.com/invoice/916991a1-0985-4cfb-a860-fb6412f462ad\",\r\n            \"underpaid_amount\": \"0\",\r\n            \"overpaid_amount\": \"0\",\r\n            \"is_refundable\": false\r\n        }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-sandbox.coingate.com/v2/orders",
+					"protocol": "https",
+					"host": [
+						"api-sandbox",
+						"coingate",
+						"com"
+					],
+					"path": [
+						"v2",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post order in BTC with ivalid amount",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "df233f53-911a-4046-b293-315383f64366",
+						"exec": [
+							"pm.test(\"Status code is 422\", function () {\r",
+							"    pm.response.to.have.status(422);\r",
+							"});\r",
+							"pm.test(\"Check response is false\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include('\"Order is not valid\"');\r",
+							"});\r",
+							"pm.test(\"Check if currency does not exist\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include('\"Price amount must be greater or equal to 0.0001 BTC\"');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n            \"id\": 241263,\r\n            \"status\": \"new\",\r\n            \"do_not_convert\": false,\r\n            \"price_currency\": \"BTC\",\r\n            \"price_amount\": \"0,00000001\",\r\n            \"lightning_network\": false,\r\n            \"receive_currency\": \"USD\",\r\n            \"receive_amount\": \"\",\r\n            \"created_at\": \"2020-05-16T11:07:49+00:00\",\r\n            \"order_id\": \"111\",\r\n            \"payment_url\": \"https://pay-sandbox.coingate.com/invoice/916991a1-0985-4cfb-a860-fb6412f462ad\",\r\n            \"underpaid_amount\": \"0\",\r\n            \"overpaid_amount\": \"0\",\r\n            \"is_refundable\": false\r\n        }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-sandbox.coingate.com/v2/orders",
+					"protocol": "https",
+					"host": [
+						"api-sandbox",
+						"coingate",
+						"com"
+					],
+					"path": [
+						"v2",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post new valid order",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "4c883293-d167-4ba1-8a24-ecf34e77578d",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.globals.set(\"order_id\", jsonData.id);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n          \r\n            \"status\": \"new\",\r\n            \"do_not_convert\": false,\r\n            \"price_currency\": \"USD\",\r\n            \"price_amount\": \"5000\",\r\n            \"lightning_network\": false,\r\n            \"receive_currency\": \"USD\",\r\n            \"receive_amount\": \"\",\r\n            \"created_at\": \"2020-05-16T11:07:49+00:00\",\r\n            \"order_id\": \"111\",\r\n            \"payment_url\": \"https://pay-sandbox.coingate.com/invoice/916991a1-0985-4cfb-a860-fb6412f462ad\",\r\n            \"underpaid_amount\": \"0\",\r\n            \"overpaid_amount\": \"0\",\r\n            \"is_refundable\": false\r\n        }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-sandbox.coingate.com/v2/orders",
+					"protocol": "https",
+					"host": [
+						"api-sandbox",
+						"coingate",
+						"com"
+					],
+					"path": [
+						"v2",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Checkout new order",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c2e6c8f2-caf1-4c5b-b35f-27a2251fb38d",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.globals.set(\"order_id\", jsonData.id);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \r\n    \"pay_amount\": \"0.000023\",\r\n    \"pay_currency\": \"BTC\",\r\n    \"payment_address\": \"2MzyF5xfYRAmHVPwG6YPRMY74dojhAVEtmm\",\r\n    \"payment_url\": \"http://coingate.com/invoice/4949cf0a-fccb-4cc2-9342-7af1890cc664\",\r\n    \"price_amount\": \"0.01\",\r\n    \"price_currency\": \"USD\",\r\n    \"receive_amount\": \"0.01\",\r\n    \"receive_currency\": \"USD\",\r\n    \"status\": \"pending\",\r\n    \"created_at\": \"2018-05-04T21:46:07+00:00\",\r\n    \"expire_at\": \"2018-05-04T22:11:58+00:00\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api-sandbox.coingate.com/v2/orders/{{order_id}}/checkout",
+					"protocol": "https",
+					"host": [
+						"api-sandbox",
+						"coingate",
+						"com"
+					],
+					"path": [
+						"v2",
+						"orders",
+						"{{order_id}}",
+						"checkout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check if order status is changed",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c755e53a-5ae3-44f6-bab5-6c9d0dbad976",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Check order status\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include('\"status\":\"pending\"');\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api-sandbox.coingate.com/v2/orders/{{order_id}}",
+					"protocol": "https",
+					"host": [
+						"api-sandbox",
+						"coingate",
+						"com"
+					],
+					"path": [
+						"v2",
+						"orders",
+						"{{order_id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "RrTQE5yMEsA3eBMcB297oT4kF3CzAUREib7bf2_t",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "5ca68f7b-b3ed-4015-9ffa-c77e36962fd6",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "574570fd-1fbb-49ed-9847-54c479912208",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
